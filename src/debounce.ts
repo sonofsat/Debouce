@@ -1,13 +1,12 @@
-const useDebounce = (func: (...args: any[]) => void, delay: number) => {
-    let timeout: NodeJS.Timeout | null=null;
-
-    return (...args: any[]) => {
-        if(timeout) clearTimeout(timeout);
-
-        timeout=setTimeout(() => {
-            func(...args)
-        }, delay)
-    }
-}
-
-export default useDebounce
+function debounce<T extends (...args: any[]) => void>(func: T, timeout = 500) {
+    let timer: NodeJS.Timeout;
+    return function (this: any, ...args: Parameters<T>) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
+  }
+  
+  export default debounce;
+  
